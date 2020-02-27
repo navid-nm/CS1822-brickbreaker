@@ -108,6 +108,7 @@ inter = Interaction(paddle, ball, kbd)
 
 
 
+
 frame = sg.create_frame('Brickbreaker', WIDTH, HEIGHT)
 frame.set_draw_handler(inter.draw); frame.set_keydown_handler(kbd.keyDown); frame.set_keyup_handler(kbd.keyUp)
 frame.start()

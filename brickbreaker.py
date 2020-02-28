@@ -98,7 +98,7 @@ class Interaction:
 
 
 
-bpos = Vector(WIDTH/2, HEIGHT/2); bmov = Vector(1,3)
+bpos = Vector(WIDTH/2, HEIGHT/2); bmov = Vector(1,4)
 ball = Ball(bpos, bmov, 15, 15, 'grey')
 
 kbd = Keyboard()

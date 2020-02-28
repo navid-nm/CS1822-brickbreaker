@@ -21,7 +21,7 @@ class Paddle:
         canvas.draw_polygon([(self.pos.x, y1), (self.pos.x, y2), (self.pos.x + 150, y2), (self.pos.x + 150, y1)], 5, "white")
 
     def hit(self, ball):
-        h = self.pos.y-30 <= ball.pos.y <= self.pos.y
+        h = self.pos.y-35 <= ball.pos.y <= self.pos.y
         return h
 
     def update(self):

@@ -3,22 +3,77 @@ except: import simplegui as sg
 try:    from user304_rsf8mD0BOQ_1 import Vector
 except: from V1 import Vector
 import math
+import simplegui
 
 WIDTH = 800
 HEIGHT = 600
 y1 = HEIGHT-60; y2 = HEIGHT-35
 
+
+bricks = []
+x = 0 
+
+#start coord
+xx  = 30 #pointx[0]
+y = 50   #pointx[1] and pointy[1]
+yx = 160 #pointy[0]
+
+
+def add_brick(): 
+    global x, bricks, xx, yx, y
+    x += 1
+    
+    #centre line for bricks
+    pointx = xx,y
+    pointy = yx, y
+    
+    points = [pointx, pointy]
+    
+    #height of brick 
+    width = 50
+    colour = "white"
+    
+    brick = Bricks(points, width, colour, bricks)
+    bricks.append(brick)
+    
+    xx += 150
+    yx += 150
+    
+    if xx > 700:
+        y += 70
+        xx = 30 
+        yx = 160
+    
+    if y > 300 :
+        y +=0
+        xx = WIDTH 
+        yx = WIDTH
+        
+        
+class Bricks:
+
+    def __init__(self, points, width, colour, bricks):
+        self.points = points
+        self.width = width
+        self.colour = colour
+        self.bricks = bricks
+        
+    def draw(self, canvas):
+        canvas.draw_polygon(self.points, self.width, self.colour)
+               
+        
 class Paddle:
     def __init__(self, pos, radius=10):
         self.pos = pos
         self.vel = Vector()
         self.normal = Vector(0, 1)
         self.radius = max(radius, 10)
-        self.colour = 'White'
+        self.colour = 'black'
 
     def draw(self, canvas):
         global x1, x2
         canvas.draw_polygon([(self.pos.x, y1), (self.pos.x, y2), (self.pos.x + 150, y2), (self.pos.x + 150, y1)], 5, "white")
+        frame.set_canvas_background("black")
 
     def hit(self, ball):
         h = self.pos.y-35 <= ball.pos.y <= self.pos.y and self.pos.x-200 <= ball.pos.x <= self.pos.x + 200
@@ -52,7 +107,7 @@ class Ball:
     def bounce(self, normal):
         self.vel.reflect(normal)
 
-
+            
 class Keyboard:
     def __init__(self):
         self.right = False; self.left = False
@@ -68,14 +123,17 @@ class Keyboard:
             self.right = False
         elif key == sg.KEY_MAP['left']:
             self.left = False
-
-
+ 
+       
 class Interaction:
-    def __init__(self, paddle, ball, keyboard):
-        self.paddle = paddle; self.keyboard = keyboard; self.ball = ball
+    def __init__(self, paddle, ball, keyboard, bricks):
+        self.paddle = paddle
+        self.keyboard = keyboard
+        self.ball = ball
+        self.bricks = bricks
         self.in_col = False
 
-    def update(self):
+    def update(self, canvas):
         if self.keyboard.right:
             self.paddle.vel.add(Vector(1, 0))
         elif self.keyboard.left:
@@ -88,27 +146,58 @@ class Interaction:
                 in_col = True
             else:
                 self.in_col = False
+                
+                
+        for brick in self.bricks:
+            brick.draw(canvas)
+            
+            for brick1 in self.bricks:
+                
+                left = xx
+                right = yx
+                bottom = xx + 25
+                top = xx - 25
+                #print(bottom)
+                
+                #print(self.ball.pos.x)
+               # print(xx)
+            
+                if self.ball.pos.x <= bottom:
+                    print("hit")
+            
+        
         self.ball.update()
         self.paddle.update()
 
     def draw(self, canvas):
-        self.update();
-        self.paddle.draw(canvas);
-        self.ball.draw(canvas);
+        self.update(canvas)
+        self.paddle.draw(canvas)
+        self.ball.draw(canvas)
+
+        
+            
+    #def hit():
+        
+    #def do_bounce():
+        
+    #def collision():
+        
+        
+
+bpos = Vector(WIDTH/2, 500); bmov = Vector(1,35)
 
 
-
-bpos = Vector(WIDTH/2, HEIGHT/2); bmov = Vector(1,4)
-ball = Ball(bpos, bmov, 15, 15, 'grey')
+ball = Ball(bpos, bmov, 15, 15, 'white')
 
 kbd = Keyboard()
 paddle = Paddle(Vector((WIDTH / 2)-75, HEIGHT - 40), 40)
-inter = Interaction(paddle, ball, kbd)
 
+add_brick = simplegui.create_timer(250, add_brick)
+add_brick.start()
 
-
-
+inter = Interaction(paddle, ball, kbd, bricks)
 
 frame = sg.create_frame('Brickbreaker', WIDTH, HEIGHT)
 frame.set_draw_handler(inter.draw); frame.set_keydown_handler(kbd.keyDown); frame.set_keyup_handler(kbd.keyUp)
 frame.start()
+

@@ -157,17 +157,6 @@ class Interaction:
         for brick in self.bricks:
             brick.draw(canvas)
             
-            for brick1 in self.bricks:
-                
-                left = xx
-                right = yx
-                bottom = xx + 25
-                top = xx - 25
-                #print(bottom)
-                
-                #print(self.ball.pos.x)
-               # print(xx)
-            
 
             
             

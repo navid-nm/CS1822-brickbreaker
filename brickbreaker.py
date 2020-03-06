@@ -5,6 +5,9 @@ except: from V1 import Vector
 import math
 import simplegui
 
+
+from time import sleep
+
 WIDTH = 800
 HEIGHT = 600
 y1 = HEIGHT-60; y2 = HEIGHT-35
@@ -18,6 +21,9 @@ xx  = 30 #pointx[0]
 y = 50   #pointx[1] and pointy[1]
 yx = 160 #pointy[0]
 
+pointx = xx,y
+print(type(pointx))
+
 
 def add_brick(): 
     global x, bricks, xx, yx, y
@@ -26,6 +32,7 @@ def add_brick():
     #centre line for bricks
     pointx = xx,y
     pointy = yx, y
+    
     
     points = [pointx, pointy]
     
@@ -51,7 +58,6 @@ def add_brick():
         
         
 class Bricks:
-
     def __init__(self, points, width, colour, bricks):
         self.points = points
         self.width = width
@@ -76,7 +82,7 @@ class Paddle:
         frame.set_canvas_background("black")
 
     def hit(self, ball):
-        h = self.pos.y-35 <= ball.pos.y <= self.pos.y and self.pos.x-200 <= ball.pos.x <= self.pos.x + 200
+        h = self.pos.y-45 <= ball.pos.y <= self.pos.y and self.pos.x-200 <= ball.pos.x <= self.pos.x + 150
         return h 
 
     def update(self):
@@ -162,8 +168,8 @@ class Interaction:
                 #print(self.ball.pos.x)
                # print(xx)
             
-                if self.ball.pos.x <= bottom:
-                    print("hit")
+
+            
             
         
         self.ball.update()
@@ -184,7 +190,7 @@ class Interaction:
         
         
 
-bpos = Vector(WIDTH/2, 500); bmov = Vector(1,35)
+bpos = Vector(WIDTH/2, 500); bmov = Vector(1,9)
 
 
 ball = Ball(bpos, bmov, 15, 15, 'white')
@@ -192,7 +198,7 @@ ball = Ball(bpos, bmov, 15, 15, 'white')
 kbd = Keyboard()
 paddle = Paddle(Vector((WIDTH / 2)-75, HEIGHT - 40), 40)
 
-add_brick = simplegui.create_timer(250, add_brick)
+add_brick = simplegui.create_timer(12, add_brick)
 add_brick.start()
 
 inter = Interaction(paddle, ball, kbd, bricks)
@@ -200,4 +206,3 @@ inter = Interaction(paddle, ball, kbd, bricks)
 frame = sg.create_frame('Brickbreaker', WIDTH, HEIGHT)
 frame.set_draw_handler(inter.draw); frame.set_keydown_handler(kbd.keyDown); frame.set_keyup_handler(kbd.keyUp)
 frame.start()
-

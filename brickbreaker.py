@@ -13,6 +13,7 @@ y1 = HEIGHT-60; y2 = HEIGHT-35
 
 bricks = []
 x = 0 
+score = 0
 
 #start coord
 xx  = 30 #pointx[0]
@@ -29,7 +30,7 @@ def add_brick():
     pointy = yx,y
 
 
-    points = [pointx, pointy]
+    points = (pointx, pointy)
 
     #height of brick 
     width = 50
@@ -54,14 +55,17 @@ def add_brick():
 
 class Bricks:
     def __init__(self, points, width, colour, bricks):
-        self.points = points
+        self.pos = points
         self.width = width
         self.colour = colour
         self.bricks = bricks
 
     def draw(self, canvas):
-        canvas.draw_polygon(self.points, self.width, self.colour)
-
+        canvas.draw_polygon(self.pos, self.width, self.colour)
+        
+    def hit(self, ball):
+        h = self.pos[1][1]<= ball.pos.y <= self.pos[1][1] + 40
+        return h 
 
 class Paddle:
     def __init__(self, pos, radius=10):
@@ -77,7 +81,7 @@ class Paddle:
         frame.set_canvas_background("black")
 
     def hit(self, ball):
-        h = self.pos.y-45 <= ball.pos.y <= self.pos.y and self.pos.x-200 <= ball.pos.x <= self.pos.x + 150
+        h = self.pos.y-40 <= ball.pos.y <= self.pos.y and self.pos.x-20 <= ball.pos.x <= self.pos.x + 171
         return h 
 
     def update(self):
@@ -157,6 +161,8 @@ class Interaction:
         self.bricknum = bricknum
 
     def update(self, canvas):
+        global score
+        
         if self.keyboard.right:
             self.paddle.vel.add(Vector(1, 0))
         
@@ -177,18 +183,29 @@ class Interaction:
             else:
                 self.in_col = False
 
-        del self.bricks[self.bricknum:]
+                
         for a in range(0, len(self.bricks)):
-            print(a)
-            self.bricks[a].draw(canvas)
-
+            if self.bricks[a].hit(self.ball):
+                if not self.in_col:
+                    self.ball.bounce(self.paddle.normal)
+                    score += 10
+                else:
+                    self.in_col = False
+                    
         self.ball.update()
         self.paddle.update()
 
     def draw(self, canvas):
+        global score
         self.update(canvas)
         self.paddle.draw(canvas)
         self.ball.draw(canvas)
+        
+        del self.bricks[self.bricknum:]
+        for a in range(0, len(self.bricks)):
+            self.bricks[a].draw(canvas)
+        
+        canvas.draw_text("Score: " + str(score), (5, 15) , 19, "white")
 
     #def hit():
     #def do_bounce():
@@ -196,7 +213,7 @@ class Interaction:
 
 
 
-bpos = Vector(WIDTH/2, 500); bmov = Vector(1,9)
+bpos = Vector(WIDTH/2, 500); bmov = Vector(1,-9)
 ball = Ball(bpos, bmov, 15, 15, 'white')
 kbd = Keyboard()
 
@@ -210,6 +227,3 @@ inter = Interaction(paddle, ball, kbd, bricks, wall, 10)
 frame = sg.create_frame('Brickbreaker', WIDTH, HEIGHT)
 frame.set_draw_handler(inter.draw); frame.set_keydown_handler(kbd.keyDown); frame.set_keyup_handler(kbd.keyUp)
 frame.start()
-
-
-

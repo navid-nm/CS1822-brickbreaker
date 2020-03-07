@@ -3,7 +3,6 @@ except: import simplegui as sg
 try:    from user304_rsf8mD0BOQ_1 import Vector
 except: from V1 import Vector
 import math
-import simplegui
 
 
 WIDTH = 800
@@ -217,7 +216,7 @@ kbd = Keyboard()
 paddle = Paddle(Vector((WIDTH / 2)-75, HEIGHT - 40), 40)
 
 wall = Wall(0)
-add_brick = simplegui.create_timer(12, add_brick)
+add_brick = sg.create_timer(12, add_brick)
 add_brick.start()
 
 inter = Interaction(paddle, ball, kbd, bricks, wall, 10)

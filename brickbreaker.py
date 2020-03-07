@@ -6,8 +6,6 @@ import math
 import simplegui
 
 
-from time import sleep
-
 WIDTH = 800
 HEIGHT = 600
 y1 = HEIGHT-60; y2 = HEIGHT-35
@@ -20,10 +18,7 @@ x = 0
 xx  = 30 #pointx[0]
 y = 50   #pointx[1] and pointy[1]
 yx = 160 #pointy[0]
-
 pointx = xx,y
-print(type(pointx))
-
 
 def add_brick(): 
     global x, bricks, xx, yx, y
@@ -31,7 +26,7 @@ def add_brick():
 
     #centre line for bricks
     pointx = xx,y
-    pointy = yx, y
+    pointy = yx,y
 
 
     points = [pointx, pointy]
@@ -51,7 +46,7 @@ def add_brick():
         xx = 30 
         yx = 160
 
-    if y > 300 :
+    if y > 300:
         y +=0
         xx = WIDTH 
         yx = WIDTH
@@ -93,6 +88,8 @@ class Paddle:
 
         self.pos.add(self.vel);
         self.vel.multiply(0.85)
+        
+        
 class Wall:
     def __init__(self, x):
         self.x = x
@@ -124,10 +121,12 @@ class Ball:
 
     def update(self):
         self.pos.add(self.vel)
-
+    
     def draw(self, canvas):
         canvas.draw_circle(self.pos.get_p(),self.radius,self.border,
                            self.color, self.color)
+    
+    
     def bounce(self, normal):
         self.vel.reflect(normal)
 
@@ -150,42 +149,40 @@ class Keyboard:
 
 
 class Interaction:
-    def __init__(self, paddle, ball, keyboard, bricks,wall):
+    def __init__(self, paddle, ball, keyboard, bricks, wall, bricknum):
         self.paddle = paddle
         self.keyboard = keyboard
         self.ball = ball
         self.bricks = bricks
-        self.in_col = False
-        self.in_collision=True
-        self.wall=wall
+        self.in_col = False; self.in_collision = True
+        self.wall = wall
+        self.bricknum = bricknum
 
     def update(self, canvas):
         if self.keyboard.right:
             self.paddle.vel.add(Vector(1, 0))
+        
         elif self.keyboard.left:
             self.paddle.vel.add(Vector(-1, 0))
+            
         if self.wall.hit(self.ball):
             if not self.in_collision:
                 self.ball.bounce(self.wall.normal)
                 self.in_collision = True
-
             else:
                 self.in_collision = False
+                
         if self.paddle.hit(self.ball) or 0 <= self.ball.pos.y <= 10:
-
             if not self.in_col:
                 self.ball.bounce(self.paddle.normal)
                 in_col = True
             else:
                 self.in_col = False
 
-
-        for brick in self.bricks:
-            brick.draw(canvas)
-
-
-
-
+        del self.bricks[self.bricknum:]
+        for a in range(0, len(self.bricks)):
+            print(a)
+            self.bricks[a].draw(canvas)
 
         self.ball.update()
         self.paddle.update()
@@ -195,29 +192,26 @@ class Interaction:
         self.paddle.draw(canvas)
         self.ball.draw(canvas)
 
-
-
     #def hit():
-
     #def do_bounce():
-
     #def collision():
 
 
 
 bpos = Vector(WIDTH/2, 500); bmov = Vector(1,9)
-
-
 ball = Ball(bpos, bmov, 15, 15, 'white')
-
 kbd = Keyboard()
+
 paddle = Paddle(Vector((WIDTH / 2)-75, HEIGHT - 40), 40)
-wall=Wall(0)
+
+wall = Wall(0)
 add_brick = simplegui.create_timer(12, add_brick)
 add_brick.start()
 
-inter = Interaction(paddle, ball, kbd, bricks,wall)
-
+inter = Interaction(paddle, ball, kbd, bricks, wall, 10)
 frame = sg.create_frame('Brickbreaker', WIDTH, HEIGHT)
 frame.set_draw_handler(inter.draw); frame.set_keydown_handler(kbd.keyDown); frame.set_keyup_handler(kbd.keyUp)
 frame.start()
+
+
+

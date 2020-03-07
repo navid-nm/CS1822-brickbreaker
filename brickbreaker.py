@@ -28,8 +28,6 @@ def add_brick():
     #centre line for bricks
     pointx = xx,y
     pointy = yx,y
-
-
     points = (pointx, pointy)
 
     #height of brick 
@@ -102,7 +100,6 @@ class Wall:
         self.edge_l = WIDTH - 40
 
     def hit(self, ball):
-
         if (ball.offset_l() <= self.edge_r) == True:
             h = (ball.offset_l() <= self.edge_r)
             print("left wall")

@@ -64,6 +64,7 @@ class Bricks:
         h = self.pos[1][1]<= ball.pos.y <= self.pos[1][1] + 40
         return h 
 
+    
 class Paddle:
     def __init__(self, pos, radius=10):
         self.pos = pos

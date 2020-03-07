@@ -203,11 +203,6 @@ class Interaction:
         
         canvas.draw_text("Score: " + str(score), (5, 15) , 19, "white")
 
-    #def hit():
-    #def do_bounce():
-    #def collision():
-
-
 
 bpos = Vector(WIDTH/2, 500); bmov = Vector(1,-9)
 ball = Ball(bpos, bmov, 15, 15, 'white')

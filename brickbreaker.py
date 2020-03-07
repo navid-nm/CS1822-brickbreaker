@@ -125,8 +125,6 @@ class Ball:
     def draw(self, canvas):
         canvas.draw_circle(self.pos.get_p(),self.radius,self.border,
                            self.color, self.color)
-    
-    
     def bounce(self, normal):
         self.vel.reflect(normal)
 

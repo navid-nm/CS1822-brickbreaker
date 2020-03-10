@@ -56,12 +56,26 @@ class Bricks:
         self.width = width
         self.colour = colour
         self.bricks = bricks
+        self.visible = True
 
     def draw(self, canvas):
-        canvas.draw_polygon(self.pos, self.width, self.colour)
+        if self.visible:
+            canvas.draw_polygon(self.pos, self.width, self.colour)
         
-    def hit(self, ball):
-        h = self.pos[1][1]<= ball.pos.y <= self.pos[1][1] + 40
+    def hit(self, ball, singlebrick):
+        if self.bricks[singlebrick].visible:
+            h = self.pos[0][1]<= ball.pos.y <= self.pos[0][1] + 40 and self.pos[0][0] - 40 <= ball.pos.x <= self.pos[0][0] + 140
+            if h:
+                self.bricks[singlebrick].visible = False
+                
+            #self.bricks[singlebrick].visible = False
+            """
+            print("self.pos.x:")
+            print(self.pos[0][0])
+            print("ball.pos.x:")
+            print(ball.pos.x)"""
+        else:
+            h = False
         return h 
 
     
@@ -175,6 +189,7 @@ class Interaction:
                 
         if self.paddle.hit(self.ball) or 0 <= self.ball.pos.y <= 10:
             if not self.in_col:
+                
                 self.ball.bounce(self.paddle.normal)
                 in_col = True
             else:
@@ -182,9 +197,11 @@ class Interaction:
 
                 
         for a in range(0, len(self.bricks)):
-            if self.bricks[a].hit(self.ball):
+            if self.bricks[a].hit(self.ball, a):
                 if not self.in_col:
                     self.ball.bounce(self.paddle.normal)
+                    #specific brick col:
+                    #self.bricks[0].bricks[14].visible = False
                     score += 10
                 else:
                     self.in_col = False
@@ -215,7 +232,7 @@ wall = Wall(0)
 add_brick = sg.create_timer(12, add_brick)
 add_brick.start()
 
-inter = Interaction(paddle, ball, kbd, bricks, wall, 10)
+inter = Interaction(paddle, ball, kbd, bricks, wall, 15)
 frame = sg.create_frame('Brickbreaker', WIDTH, HEIGHT)
 frame.set_draw_handler(inter.draw); frame.set_keydown_handler(kbd.keyDown); frame.set_keyup_handler(kbd.keyUp)
 frame.start()

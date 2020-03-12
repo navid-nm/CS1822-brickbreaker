@@ -149,7 +149,7 @@ class Keyboard:
             self.left = True
         elif key == sg.KEY_MAP['p'] and self.pause == True:
             self.pause = False
-        elif key == sg.KEY_MAP['p'] or key == sg.KEY_MAP['P']:
+        elif key == sg.KEY_MAP['p']:
             self.pause = True
         
 

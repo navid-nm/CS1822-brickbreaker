@@ -92,8 +92,9 @@ class Paddle:
     def update(self):
         if self.pos.x < 0:
             self.pos = Vector(0, 0)
-        elif self.pos.x > WIDTH:
-            self.pos = Vector(800, 0)
+            
+        elif self.pos.x > 650:
+            self.pos = Vector(650, 0)
 
         self.pos.add(self.vel);
         self.vel.multiply(0.85)

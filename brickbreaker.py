@@ -159,9 +159,35 @@ class Keyboard:
         elif key == sg.KEY_MAP['left']:
             self.left = False
 
-
+class Lives:
+    def __init__ (self, count, heart1,heart2,heart3,emptyHeart):
+        self.count=count
+        self.heart1=heart1
+        self.heart2=heart2
+        self.heart3=heart3
+        self.emptyHeart=emptyHeart
+        self.width=heart1.get_width()
+        self.height=heart1.get_height()
+    def draw(self,canvas):
+        canvas.draw_image(self.heart1,(self.width/2, self.height/2), (self.width, self.height), (75,575), (self.width, self.height))
+        canvas.draw_image(self.heart2,(self.width/2, self.height/2), (self.width, self.height), (50,575), (self.width, self.height))
+        canvas.draw_image(self.heart3,(self.width/2, self.height/2), (self.width, self.height), (25,575), (self.width, self.height))
+        
+    def lost(self,canvas):
+        global score
+        self.count+=1
+        print (self.count)
+        if self.count==1:
+            self.heart1=self.emptyHeart
+        elif self.count==2:
+            self.heart2=self.emptyHeart
+        elif self.count==3:
+            self.heart3=self.emptyHeart
+        
+            
+            
 class Interaction:
-    def __init__(self, paddle, ball, keyboard, bricks, wall, bricknum):
+    def __init__(self, paddle, ball, keyboard, bricks, wall, bricknum,live):
         self.paddle = paddle
         self.keyboard = keyboard
         self.ball = ball
@@ -169,6 +195,7 @@ class Interaction:
         self.in_col = False; self.in_collision = True
         self.wall = wall
         self.bricknum = bricknum
+        self.live=live
 
     def update(self, canvas):
         global score
@@ -205,6 +232,12 @@ class Interaction:
                 else:
                     self.in_col = False
                     
+        if self.ball.pos.y>560:
+            self.ball.pos=Vector(WIDTH/2, 500)
+            self.live.lost(canvas)
+            
+            
+                    
         self.ball.update()
         self.paddle.update()
 
@@ -216,9 +249,13 @@ class Interaction:
         else:
             canvas.draw_text("(Paused)", (WIDTH/2 + 327, HEIGHT/2 - 285) , 19, "red")
             
-
+        if self.live.count==4:
+                canvas.draw_text("Game Over", (800/2 - 120, 600/2 ) , 60, "red")
+                canvas.draw_text("Score: " + str(score), (800/2 - 70, 600/2 + 50 ) , 40, "red")
+                
         self.paddle.draw(canvas)
         self.ball.draw(canvas)
+        self.live.draw(canvas)
         
         del self.bricks[self.bricknum:]
         for a in range(0, len(self.bricks)):
@@ -230,14 +267,16 @@ class Interaction:
 bpos = Vector(WIDTH/2, 500); bmov = Vector(1,-9)
 ball = Ball(bpos, bmov, 15, 15, 'white')
 kbd = Keyboard()
-
+heart_img=sg.load_image("http://personal.rhul.ac.uk/zhac/252/heart.png")
+emptyheart_img=sg.load_image("http://personal.rhul.ac.uk/zhac/252/heart_outline.png")
+live=Lives(0,heart_img,heart_img,heart_img,emptyheart_img)
 paddle = Paddle(Vector((WIDTH / 2)-75, HEIGHT - 40), 40)
 
 wall = Wall(0)
 add_brick = sg.create_timer(12, add_brick)
 add_brick.start()
 
-inter = Interaction(paddle, ball, kbd, bricks, wall, 15)
+inter = Interaction(paddle, ball, kbd, bricks, wall, 15, live)
 frame = sg.create_frame('Brickbreaker', WIDTH, HEIGHT)
 frame.set_draw_handler(inter.draw); frame.set_keydown_handler(kbd.keyDown); frame.set_keyup_handler(kbd.keyUp)
 frame.start()

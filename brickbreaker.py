@@ -230,6 +230,7 @@ class Interaction:
                     #specific brick col:
                     #self.bricks[0].bricks[14].visible = False
                     score += 10
+                    self.in_col = True
                 else:
                     self.in_col = False
                     

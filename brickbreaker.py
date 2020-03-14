@@ -66,14 +66,7 @@ class Bricks:
         if self.bricks[singlebrick].visible:
             h = self.pos[0][1]<= ball.pos.y <= self.pos[0][1] + 40 and self.pos[0][0] - 40 <= ball.pos.x <= self.pos[0][0] + 140
             if h:
-                self.bricks[singlebrick].visible = False
-                
-            #self.bricks[singlebrick].visible = False
-            """
-            print("self.pos.x:")
-            print(self.pos[0][0])
-            print("ball.pos.x:")
-            print(ball.pos.x)"""
+                self.bricks[singlebrick].visible = False       
         else:
             h = False
         return h 

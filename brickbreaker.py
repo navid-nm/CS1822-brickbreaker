@@ -66,7 +66,15 @@ class Bricks:
         if self.bricks[singlebrick].visible:
             h = self.pos[0][1]<= ball.pos.y <= self.pos[0][1] + 40 and self.pos[0][0] - 40 <= ball.pos.x <= self.pos[0][0] + 140
             if h:
-                self.bricks[singlebrick].visible = False       
+                #ball.bounce(Vector(0, 1))
+                self.bricks[singlebrick].visible = False
+                
+            #self.bricks[singlebrick].visible = False
+            """
+            print("self.pos.x:")
+            print(self.pos[0][0])
+            print("ball.pos.x:")
+            print(ball.pos.x)"""
         else:
             h = False
         return h 
@@ -166,13 +174,18 @@ class Ball:
 
 class Keyboard:
     def __init__(self):
-        self.right = False; self.left = False
+        self.right = False; self.left = False; 
+        self.pause = False;
 
     def keyDown(self, key):
         if key == sg.KEY_MAP['right']:
             self.right = True
         elif key == sg.KEY_MAP['left']:
             self.left = True
+        elif key == sg.KEY_MAP['p'] and self.pause == True:
+            self.pause = False
+        elif key == sg.KEY_MAP['p']:
+            self.pause = True
 
     def keyUp(self, key):
         if key == sg.KEY_MAP['right']:
@@ -237,13 +250,17 @@ class Interaction:
     def draw(self, canvas):
         global score
         if not self.gameover:
-            self.update(canvas)
+            if not self.keyboard.pause:
+                self.update(canvas)
+            else:
+                canvas.draw_text("(Paused)", (WIDTH/2 + 327, HEIGHT/2 - 285) , 19, "red")
             self.paddle.draw(canvas)
             self.ball.draw(canvas)
         
         del self.bricks[self.bricknum:]
         for a in range(0, len(self.bricks)):
             self.bricks[a].draw(canvas)
+        
         
         if self.live.count==3:
                 canvas.draw_text("Game Over", (800/2 - 120, 600/2 ) , 60, "red")

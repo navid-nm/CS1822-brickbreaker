@@ -66,15 +66,7 @@ class Bricks:
         if self.bricks[singlebrick].visible:
             h = self.pos[0][1]<= ball.pos.y <= self.pos[0][1] + 40 and self.pos[0][0] - 40 <= ball.pos.x <= self.pos[0][0] + 140
             if h:
-                #ball.bounce(Vector(0, 1))
                 self.bricks[singlebrick].visible = False
-                
-            #self.bricks[singlebrick].visible = False
-            """
-            print("self.pos.x:")
-            print(self.pos[0][0])
-            print("ball.pos.x:")
-            print(ball.pos.x)"""
         else:
             h = False
         return h 
@@ -263,9 +255,9 @@ class Interaction:
         
         
         if self.live.count==3:
-                canvas.draw_text("Game Over", (800/2 - 120, 600/2 ) , 60, "red")
-                canvas.draw_text("Score: " + str(score), (800/2 - 70, 600/2 + 50 ) , 40, "red")
-                self.gameover = True;
+            canvas.draw_text("Game Over", (800/2 - 120, 600/2 ) , 60, "red")
+            canvas.draw_text("Score: " + str(score), (800/2 - 70, 600/2 + 50 ) , 40, "red")
+            self.gameover = True;
                 
         canvas.draw_text("Score: " + str(score), (5, 15) , 19, "white")
 

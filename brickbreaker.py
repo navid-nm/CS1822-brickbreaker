@@ -83,9 +83,12 @@ class Lives:
         self.height=heart1.get_height()
         
     def draw(self,canvas):
-        canvas.draw_image(self.heart1,(self.width/2, self.height/2), (self.width, self.height), (75,575), (self.width, self.height))
-        canvas.draw_image(self.heart2,(self.width/2, self.height/2), (self.width, self.height), (50,575), (self.width, self.height))
-        canvas.draw_image(self.heart3,(self.width/2, self.height/2), (self.width, self.height), (25,575), (self.width, self.height))
+        try:
+            canvas.draw_image(self.heart1,(self.width/2, self.height/2), (self.width, self.height), (75,575), (self.width, self.height))
+            canvas.draw_image(self.heart2,(self.width/2, self.height/2), (self.width, self.height), (50,575), (self.width, self.height))
+            canvas.draw_image(self.heart3,(self.width/2, self.height/2), (self.width, self.height), (25,575), (self.width, self.height))
+        except:
+            pass
         
     def lost(self,canvas):
         global score

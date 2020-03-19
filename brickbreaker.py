@@ -224,7 +224,7 @@ class Interaction:
                 self.in_col = False
 
         if self.ball.pos.y>560:
-            self.ball.pos=Vector(WIDTH/2, 300)
+            self.ball.pos=Vector(WIDTH/2, 200)
             self.live.lost(canvas)
             self.paddle.pos = Vector((WIDTH / 2)-75, HEIGHT - 40)
             

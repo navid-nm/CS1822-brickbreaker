@@ -3,6 +3,7 @@ except: import simplegui as sg
 try:    from user304_rsf8mD0BOQ_1 import Vector
 except: from V1 import Vector
 import math
+import random
 
 
 WIDTH = 800
@@ -122,8 +123,8 @@ class Paddle:
     def update(self):
         if self.pos.x < 0:
             self.pos = Vector(0, 0)
-        elif self.pos.x > WIDTH:
-            self.pos = Vector(800, 0)
+        elif self.pos.x > WIDTH - 150:
+            self.pos = Vector(650, 0)
 
         self.pos.add(self.vel);
         self.vel.multiply(0.85)
@@ -264,8 +265,10 @@ class Interaction:
                 
         canvas.draw_text("Score: " + str(score), (5, 15) , 19, "white")
 
-
-bpos = Vector(WIDTH/2, 500); bmov = Vector(1,-9)
+randvecx = random.randint(1,13)
+randvecy = random.randint(5,13)
+        
+bpos = Vector(WIDTH/2, 500); bmov = Vector(randvecx,randvecy)
 ball = Ball(bpos, bmov, 15, 15, 'white')
 kbd = Keyboard()
 paddle=sg.load_image("http://personal.rhul.ac.uk/zhac/252/breakout_pieces.png")

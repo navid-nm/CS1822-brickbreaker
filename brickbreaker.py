@@ -3,7 +3,6 @@ except: import simplegui as sg
 try:    from user304_rsf8mD0BOQ_1 import Vector
 except: from V1 import Vector
 import math
-import random
 
 
 WIDTH = 800
@@ -14,6 +13,7 @@ y1 = HEIGHT-60; y2 = HEIGHT-35
 bricks = []
 x = 0 
 score = 0
+switch = True
 
 #start coord
 xx  = 30 #pointx[0]
@@ -123,8 +123,8 @@ class Paddle:
     def update(self):
         if self.pos.x < 0:
             self.pos = Vector(0, 0)
-        elif self.pos.x > WIDTH - 150:
-            self.pos = Vector(650, 0)
+        elif self.pos.x > WIDTH:
+            self.pos = Vector(800, 0)
 
         self.pos.add(self.vel);
         self.vel.multiply(0.85)
@@ -201,7 +201,7 @@ class Interaction:
         self.live = lives; self.gameover = False
 
     def update(self, canvas):
-        global score
+        global score, switch
         
         if self.keyboard.right:
             self.paddle.vel.add(Vector(1, 0))
@@ -238,13 +238,13 @@ class Interaction:
                     score += 10
                 else:
                     self.in_col = False
-                    
+        
         self.live.draw(canvas)            
         self.ball.update()
         self.paddle.update()
 
     def draw(self, canvas):
-        global score
+        global score, switch
         if not self.gameover:
             if not self.keyboard.pause:
                 self.update(canvas)
@@ -256,8 +256,11 @@ class Interaction:
         del self.bricks[self.bricknum:]
         for a in range(0, len(self.bricks)):
             self.bricks[a].draw(canvas)
-        
-        
+            
+        if score%150==0 and self.ball.pos.y>500:
+            for a in range(0, len(self.bricks)):
+                self.bricks[a].visible = True;
+            
         if self.live.count==3:
             canvas.draw_text("Game Over", (800/2 - 120, 600/2 ) , 60, "red")
             canvas.draw_text("Score: " + str(score), (800/2 - 70, 600/2 + 50 ) , 40, "red")
@@ -265,13 +268,11 @@ class Interaction:
                 
         canvas.draw_text("Score: " + str(score), (5, 15) , 19, "white")
 
-randvecx = random.randint(1,13)
-randvecy = random.randint(5,13)
-        
-bpos = Vector(WIDTH/2, 500); bmov = Vector(randvecx,randvecy)
+
+bpos = Vector(WIDTH/2, 500); bmov = Vector(1,-9)
 ball = Ball(bpos, bmov, 15, 15, 'white')
 kbd = Keyboard()
-paddle=sg.load_image("http://personal.rhul.ac.uk/zhac/252/breakout_pieces.png")
+
 paddle = Paddle(Vector((WIDTH / 2)-75, HEIGHT - 40), 40)
 
 wall = Wall(0)
@@ -280,7 +281,6 @@ add_brick.start()
 
 heart_img=sg.load_image("http://personal.rhul.ac.uk/zhac/252/heart.png")
 emptyheart_img=sg.load_image("http://personal.rhul.ac.uk/zhac/252/heart_outline.png")
-
 live=Lives(0,heart_img,heart_img,heart_img,emptyheart_img)
 
 inter = Interaction(paddle, ball, kbd, bricks, wall, 15, live)

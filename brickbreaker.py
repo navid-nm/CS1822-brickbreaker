@@ -268,7 +268,7 @@ class Interaction:
 bpos = Vector(WIDTH/2, 500); bmov = Vector(1,-9)
 ball = Ball(bpos, bmov, 15, 15, 'white')
 kbd = Keyboard()
-
+paddle=sg.load_image("http://personal.rhul.ac.uk/zhac/252/breakout_pieces.png")
 paddle = Paddle(Vector((WIDTH / 2)-75, HEIGHT - 40), 40)
 
 wall = Wall(0)
@@ -277,6 +277,7 @@ add_brick.start()
 
 heart_img=sg.load_image("http://personal.rhul.ac.uk/zhac/252/heart.png")
 emptyheart_img=sg.load_image("http://personal.rhul.ac.uk/zhac/252/heart_outline.png")
+
 live=Lives(0,heart_img,heart_img,heart_img,emptyheart_img)
 
 inter = Interaction(paddle, ball, kbd, bricks, wall, 15, live)
